@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #e8637a;
+    --deep-rose: #c0395c;
+    --blush: #f5c6d0;
+    --cream: #fff8f5;
+    --gold: #d4a853;
+    --dark: #2a1520;
+    --soft: #7a3a50;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--dark);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── Floating petals background ── */
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .petal {
+    position: absolute;
+    top: -60px;
+    font-size: 1.4rem;
+    animation: fall linear infinite;
+    opacity: 0.55;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.6; }
+    100% { transform: translateY(110vh) rotate(360deg) scale(0.6); opacity: 0; }
+  }
+
+  /* ── Main wrapper ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 60px;
+    gap: 0;
+  }
+
+  /* ── Header hearts strip ── */
+  .hearts-strip {
+    display: flex;
+    gap: 14px;
+    font-size: 1.5rem;
+    margin-bottom: 36px;
+    animation: fadeDown 1s ease both;
+  }
+  .hearts-strip span { animation: pulse 1.8s ease-in-out infinite; }
+  .hearts-strip span:nth-child(2) { animation-delay: .3s; }
+  .hearts-strip span:nth-child(3) { animation-delay: .6s; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.35)} }
+
+  /* ── Big headline ── */
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    font-style: italic;
+    color: var(--deep-rose);
+    text-align: center;
+    line-height: 1.1;
+    animation: fadeDown 1.1s ease .2s both;
+    position: relative;
+  }
+  .headline::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 16px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── Sub name ── */
+  .sub {
+    font-size: clamp(1rem, 3vw, 1.35rem);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin-top: 12px;
+    animation: fadeDown 1.1s ease .4s both;
+  }
+
+  /* ── Quote card ── */
+  .quote-card {
+    margin: 44px auto 0;
+    max-width: 560px;
+    background: linear-gradient(135deg, #fff0f3, #fff8f5);
+    border: 1.5px solid var(--blush);
+    border-radius: 20px;
+    padding: 32px 36px;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(192,57,92,.10);
+    animation: fadeUp 1.2s ease .6s both;
+  }
+  .quote-card::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 7rem;
+    color: var(--blush);
+    position: absolute;
+    top: -20px;
+    left: 18px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .quote-text {
+    font-style: italic;
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    line-height: 1.75;
+    color: var(--soft);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .quote-author {
+    text-align: right;
+    margin-top: 14px;
+    font-size: .9rem;
+    letter-spacing: .12em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ── Big heart SVG ── */
+  .heart-wrap {
+    margin: 50px 0 0;
+    animation: fadeUp 1.2s ease .8s both;
+  }
+  .big-heart {
+    width: 130px;
+    filter: drop-shadow(0 6px 28px rgba(232,99,122,.45));
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%,100%{transform:scale(1)} 14%{transform:scale(1.18)} 28%{transform:scale(1)} 42%{transform:scale(1.10)} 70%{transform:scale(1)}
+  }
+
+  /* ── Question section ── */
+  .question-section {
+    margin-top: 54px;
+    text-align: center;
+    animation: fadeUp 1.2s ease 1s both;
+  }
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5vw, 2.8rem);
+    color: var(--dark);
+    margin-bottom: 32px;
+  }
+  .question-text em { color: var(--deep-rose); }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+  }
+
+  .btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    letter-spacing: .06em;
+    padding: 14px 38px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.15);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .btn:hover::after { opacity: 1; }
+  .btn:hover { transform: translateY(-4px) scale(1.04); }
+  .btn:active { transform: translateY(-1px) scale(.98); }
+
+  .btn-yes {
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(192,57,92,.35);
+  }
+  .btn-yes:hover { box-shadow: 0 10px 32px rgba(192,57,92,.5); }
+
+  .btn-strong {
+    background: linear-gradient(135deg, var(--gold), #c8892a);
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(212,168,83,.4);
+  }
+  .btn-strong:hover { box-shadow: 0 10px 32px rgba(212,168,83,.55); }
+
+  .btn-hate {
+    background: #f1f1f1;
+    color: #888;
+    font-style: italic;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .btn-hate:hover { transform: translateY(-4px) scale(1.04) rotate(-2deg) !important; }
+
+  /* ── Overlay / popup ── */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(42,21,32,.55);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay.show { display: flex; animation: fadeIn .35s ease; }
+
+  .popup {
+    background: linear-gradient(145deg, #fff0f4, #fff8f5);
+    border-radius: 28px;
+    padding: 52px 44px 44px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(192,57,92,.25);
+    animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn {
+    from { transform: scale(.5) translateY(40px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);     opacity: 1; }
+  }
+
+  .popup-emoji { font-size: 4rem; display: block; margin-bottom: 16px; }
+  .popup-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 6vw, 2.9rem);
+    color: var(--deep-rose);
+    font-style: italic;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .popup-sub {
+    font-size: 1.05rem;
+    color: var(--soft);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+  .popup-close {
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 18px rgba(192,57,92,.35);
+  }
+  .popup-close:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(192,57,92,.5); }
+
+  .confetti-strip {
+    font-size: 1.6rem;
+    letter-spacing: 6px;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  /* ── Hate-specific popup ── */
+  .popup.hate .popup-title { color: var(--deep-rose); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 70px;
+    font-size: .85rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #c4a0aa;
+    animation: fadeUp 1s ease 1.2s both;
+  }
+  .footer em { color: var(--rose); }
+
+  /* ── Animations ── */
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-22px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(22px);  } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+
+  /* ── Burst hearts (popup celebration) ── */
+  .burst { position: absolute; pointer-events: none; }
+  .burst span {
+    position: absolute;
+    font-size: 1.4rem;
+    animation: burst .9s ease forwards;
+    transform-origin: center;
+  }
+  @keyframes burst {
+    0%  { opacity:1; transform: translate(0,0) scale(1); }
+    100%{ opacity:0; transform: translate(var(--tx),var(--ty)) scale(.4); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating petals -->
+<div class="petals" id="petals"></div>
+
+<!-- Main page -->
+<div class="page">
+
+  <div class="hearts-strip">
+    <span>🌸</span><span>💕</span><span>🌸</span>
+  </div>
+
+  <h1 class="headline">I Love You</h1>
+  <p class="sub">More than words can ever say</p>
+
+  <div class="quote-card">
+    <p class="quote-text">
+      "You are every reason, every hope, and every dream I've ever had —
+      and no matter what happens to us in the future,
+      every day we are together is the greatest day of my life."
+    </p>
+    <p class="quote-author">— Nicholas Sparks</p>
+  </div>
+
+  <div class="heart-wrap">
+    <svg class="big-heart" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 85 C50 85 5 55 5 28 C5 14 17 5 30 5 C38 5 45 9 50 15 C55 9 62 5 70 5 C83 5 95 14 95 28 C95 55 50 85 50 85 Z"
+        fill="url(#hg)" stroke="#fff" stroke-width="1.5"/>
+      <defs>
+        <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f48a9b"/>
+          <stop offset="100%" stop-color="#c0395c"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="question-section">
+    <p class="question-text">Do you <em>love</em> me? 🥺</p>
+    <div class="btn-group">
+      <button class="btn btn-yes"    onclick="showPopup('yes')">Yes 💕</button>
+      <button class="btn btn-strong" onclick="showPopup('strong')">Strong Yes 🔥❤️</button>
+      <button class="btn btn-hate"   onclick="showPopup('hate')" id="hateBtn">Hate you 😤</button>
+    </div>
+  </div>
+
+  <p class="footer">Made with <em>♥</em> just for you</p>
+</div>
+
+<!-- Popup overlay -->
+<div class="overlay" id="overlay" onclick="closePopup(event)">
+  <div class="popup" id="popup">
+    <span class="confetti-strip" id="popConfetti"></span>
+    <span class="popup-emoji" id="popEmoji"></span>
+    <h2 class="popup-title" id="popTitle"></h2>
+    <p class="popup-sub" id="popSub"></p>
+    <button class="popup-close" onclick="closePopupDirect()">Close 💌</button>
+  </div>
+</div>
+
+<script>
+/* ── Floating petals ── */
+(function spawnPetals() {
+  const wrap = document.getElementById('petals');
+  const emojis = ['🌸','🌺','💮','🏵️','🌷','💗','💓','🌼'];
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('span');
+    el.classList.add('petal');
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left     = Math.random() * 100 + 'vw';
+    el.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
+    el.style.animationDuration  = (7 + Math.random() * 10) + 's';
+    el.style.animationDelay     = (-Math.random() * 12) + 's';
+    wrap.appendChild(el);
+  }
+})();
+
+/* ── Hate button run-away ── */
+let hateEscapes = 0;
+document.getElementById('hateBtn').addEventListener('mouseover', function() {
+  if (hateEscapes >= 3) return; // after 3 escapes, let them click it
+  hateEscapes++;
+  const btn = this;
+  const pw = btn.parentElement.offsetWidth;
+  const ph = btn.parentElement.offsetHeight;
+  const rx = (Math.random() - .5) * pw * .7;
+  const ry = (Math.random() - .5) * ph * 1.2;
+  btn.style.transform = `translate(${rx}px,${ry}px) rotate(${(Math.random()-.5)*20}deg)`;
+  btn.style.transition = 'transform .35s cubic-bezier(.34,1.56,.64,1)';
+});
+
+/* ── Popup data ── */
+const popupData = {
+  yes: {
+    confetti: '🎊💕🎉💖🎊',
+    emoji: '🥰',
+    title: 'I Love You Too!',
+    sub: 'My heart just did a happy little dance. You are my favourite everything — my sunshine on cloudy days and my stars on clear nights. ✨'
+  },
+  strong: {
+    confetti: '🔥❤️‍🔥🌹❤️🔥',
+    emoji: '😍',
+    title: 'I Love You More!',
+    sub: 'STRONG YES?! You just made my whole world sparkle ✨. I love you to the moon, back, and about a million times more. Forever yours. 💍🌙'
+  },
+  hate: {
+    confetti: '💕💕💕💕💕',
+    emoji: '🤭',
+    title: 'I Love You 2! 😘',
+    sub: 'Okay okay, even if you "hate" me — I still love you endlessly, hopelessly, and completely. You can\'t escape this love! 💌'
+  }
+};
+
+function showPopup(type) {
+  const d = popupData[type];
+  document.getElementById('popConfetti').textContent = d.confetti;
+  document.getElementById('popEmoji').textContent    = d.emoji;
+  document.getElementById('popTitle').textContent    = d.title;
+  document.getElementById('popSub').textContent      = d.sub;
+
+  const popup = document.getElementById('popup');
+  popup.className = 'popup ' + (type === 'hate' ? 'hate' : '');
+
+  document.getElementById('overlay').classList.add('show');
+
+  // burst hearts
+  spawnBurst(popup);
+}
+
+function spawnBurst(container) {
+  const burst = document.createElement('div');
+  burst.className = 'burst';
+  burst.style.cssText = 'top:50%;left:50%;';
+  const emojis = ['💕','💖','💗','❤️','💓','✨','🌸'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const angle = (i / 14) * 360;
+    const dist  = 80 + Math.random() * 80;
+    const tx = Math.cos(angle * Math.PI/180) * dist;
+    const ty = Math.sin(angle * Math.PI/180) * dist;
+    s.style.setProperty('--tx', tx + 'px');
+    s.style.setProperty('--ty', ty + 'px');
+    s.style.animationDelay = (Math.random() * .3) + 's';
+    burst.appendChild(s);
+  }
+  container.appendChild(burst);
+  setTimeout(() => burst.remove(), 1200);
+}
+
+function closePopup(e) {
+  if (e.target === document.getElementById('overlay')) closePopupDirect();
+}
+function closePopupDirect() {
+  document.getElementById('overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
